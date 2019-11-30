@@ -2,7 +2,7 @@
 Used to track played video games.
 
 ## Download
-[Release Version](/Game%20Tracker%20WPF.rar)
+[Release Version](https://github.com/JarenOwens/Game-Tracker-WPF/raw/master/Game%20Tracker%20WPF.rar)
 
 ## Description
 This application helps you keep track of which games you have been playing and some basic stats.
