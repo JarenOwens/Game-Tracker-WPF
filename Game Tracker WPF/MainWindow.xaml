@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameTracker"
         mc:Ignorable="d"
-        Title="Game Tracker" Height="346" Width="986" Closed="Game_Tracker_Closed" Closing="Game_Tracker_Closing" Loaded="Game_Tracker_Loaded">
+        Title="Game Tracker" Height="346" Width="986" Closing="Game_Tracker_Closing" Loaded="Game_Tracker_Loaded">
     <Grid x:Name="grid_main_window" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -71,7 +71,7 @@
             <ComboBox x:Name="combobox_year" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="20" SelectionChanged="combobox_year_SelectionChanged" Grid.Row="1"/>
 
         </Grid>
-        <DataGrid x:Name="datagrid_games" Grid.Row="1" AutoGenerateColumns="False" FontSize="15" IsReadOnly="True" SelectionMode="Single" SelectionChanged="datagrid_games_SelectionChanged" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,1,0,0" Loaded="datagrid_games_Loaded">
+        <DataGrid x:Name="datagrid_games" Grid.Row="1" AutoGenerateColumns="False" FontSize="15" IsReadOnly="True" SelectionMode="Single" SelectionChanged="datagrid_games_SelectionChanged" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,1,0,0">
             <DataGrid.Columns>
                 <DataGridTextColumn  Header="Name" Width="3*" CanUserResize="False" Binding="{Binding name}" />
 
