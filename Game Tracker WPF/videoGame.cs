@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using System.Windows.Controls;
 using System.Net;
 using System.Drawing;
+using System.IO;
 
 namespace Game_Tracker_1
 {
@@ -96,20 +97,15 @@ namespace Game_Tracker_1
 
         public void update_image()
         {
-            if (image_link != "")
+            if(image_link != "")
             {
                 try
                 {
-                    var request = WebRequest.Create(image_link);
-                    using (var response = request.GetResponse())
-                    using (var stream = response.GetResponseStream())
-                    {
-                        image = Bitmap.FromStream(stream);
-                    }
+                    image = Bitmap.FromFile(image_link);
                 }
                 catch (Exception)
                 {
-                    image = null;
+                    //do nothing
                 }
             }
         }

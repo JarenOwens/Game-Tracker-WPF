@@ -1,8 +1,11 @@
 ﻿using Game_Tracker_1;
 using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
@@ -118,7 +121,17 @@ namespace GameTracker
                     selected_game.endDateString = datepicker_end_date.SelectedDate.Value.Date.ToShortDateString();
 
                     selected_game.hours = Convert.ToDouble(numberbox_hours_played.Text);
-                    selected_game.hoursString = numberbox_hours_played.Text;
+
+                    //display 0 hours as NA
+                    if(numberbox_hours_played.Text != "0")
+                    {
+                        selected_game.hoursString = numberbox_hours_played.Text;
+                    }
+                    else
+                    {
+                        selected_game.hoursString = "NA";
+                    }
+                    
                 }
                 else
                 {
@@ -129,7 +142,15 @@ namespace GameTracker
                     selected_game.hours = 0;
                 }
 
-                selected_game.image_link = texbox_image_url.Text;
+                selected_game.image_link = @"images\" + selected_game.name + ".png";
+                try
+                {
+                    SaveImage(texbox_image_url.Text, @"images\" + selected_game.name + ".png", ImageFormat.Png);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
                 selected_game.update_image();
 
                 //save changes to file
@@ -142,6 +163,23 @@ namespace GameTracker
                 //do nothing
             }
             
+        }
+
+        //retrieved from https://stackoverflow.com/questions/24797485/how-to-download-image-from-url
+        public void SaveImage(string imageUrl, string filename, ImageFormat format)
+        {
+            WebClient client = new WebClient();
+            Stream stream = client.OpenRead(imageUrl);
+            Bitmap bitmap; bitmap = new Bitmap(stream);
+
+            if (bitmap != null)
+            {
+                bitmap.Save(filename, format);
+            }
+
+            stream.Flush();
+            stream.Close();
+            client.Dispose();
         }
 
         //delete selected item when pressed
