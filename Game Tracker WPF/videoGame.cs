@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Xml.Serialization;
+using System.Windows.Controls;
+using System.Net;
+using System.Drawing;
 
 namespace Game_Tracker_1
 {
@@ -39,6 +42,9 @@ namespace Game_Tracker_1
         //how the hours will be displayed, NA if hours == 0
         [XmlElement("hours_string")]
         public string hoursString { get; set; }
+        [XmlElement("image_link")]
+        public string image_link { get; set; }
+        public System.Drawing.Image image { get; set; }
 
         public videoGame()
         {
@@ -51,9 +57,13 @@ namespace Game_Tracker_1
             endDateString = "";
             hours = 0;
             hoursString = "NA";
+            image_link = "";
+            image = null;
+
+            update_image();
         }
 
-        public videoGame(string name, string beaten, string wantToBeat, DateTime startDate, DateTime endDate, double hours)
+        public videoGame(string name, string beaten, string wantToBeat, DateTime startDate, DateTime endDate, double hours, string image_link)
         {
             this.name = name;
             this.beaten = beaten;
@@ -79,6 +89,29 @@ namespace Game_Tracker_1
             {
                 hoursString = "NA";
             }
+            this.image_link = image_link;
+
+            update_image();
+        }
+
+        public void update_image()
+        {
+            if (image_link != "")
+            {
+                try
+                {
+                    var request = WebRequest.Create(image_link);
+                    using (var response = request.GetResponse())
+                    using (var stream = response.GetResponseStream())
+                    {
+                        image = Bitmap.FromStream(stream);
+                    }
+                }
+                catch (Exception)
+                {
+                    image = null;
+                }
+            }
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context) //object data to be serialized to a file
@@ -92,6 +125,7 @@ namespace Game_Tracker_1
             info.AddValue("endDateString", endDateString);
             info.AddValue("hours", hours);
             info.AddValue("hoursString", hoursString);
+            info.AddValue("image_link", image_link);
         }
 
         public videoGame(SerializationInfo info, StreamingContext context)
@@ -107,6 +141,7 @@ namespace Game_Tracker_1
             {
                 hours = (double)info.GetValue("hours", typeof(double));
                 hoursString = (string)info.GetValue("hoursString", typeof(string));
+                image_link = (string)info.GetValue("image_link", typeof(string));
             }
             catch (Exception)
             {
