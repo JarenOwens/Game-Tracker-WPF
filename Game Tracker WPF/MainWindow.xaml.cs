@@ -329,11 +329,13 @@ namespace GameTracker
 
             //update start date datepicker
             datepicker_start_date.SelectedDate = current_game.startDate;
+            datepicker_start_date.DisplayDate = current_game.startDate;
             //disable end date datepicker and hours numberbox if game isn't beaten
             if(current_game.beaten != "Yes")
             {
                 datepicker_end_date.IsEnabled = false;
                 datepicker_end_date.SelectedDate = DateTime.Now;
+                datepicker_end_date.DisplayDate = DateTime.Now;
                 numberbox_hours_played.IsEnabled = false;
                 numberbox_hours_played.Text = "0";
             }
@@ -342,6 +344,7 @@ namespace GameTracker
                 //if game is beaten re-enable end date datepicker and hours numberbox and set values
                 datepicker_end_date.IsEnabled = true;
                 datepicker_end_date.SelectedDate = current_game.endDate;
+                datepicker_end_date.DisplayDate = current_game.endDate;
 
                 numberbox_hours_played.IsEnabled = true;
                 numberbox_hours_played.Text = Convert.ToString(current_game.hours);

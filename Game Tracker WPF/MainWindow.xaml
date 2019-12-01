@@ -55,8 +55,8 @@
             <Label x:Name="label_end_date" Grid.Column="3" Grid.Row="1" Content="End Date" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="78" FontSize="9"/>
             <Label x:Name="label_hours_played" Grid.Column="3" Grid.Row="2" Content="Hours Played" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="78" FontSize="9"/>
             <Label x:Name="label_sort" Grid.Column="3" Grid.Row="3" Content="Sort" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="78" FontSize="9"/>
-            <DatePicker x:Name="datepicker_start_date" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="170" DisplayDate="2019-11-30" IsEnabled="False"/>
-            <DatePicker x:Name="datepicker_end_date" Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="24" Width="170" DisplayDate="2019-11-30" IsEnabled="False"/>
+            <DatePicker x:Name="datepicker_start_date" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="170" IsEnabled="False"/>
+            <DatePicker x:Name="datepicker_end_date" Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="24" Width="170" IsEnabled="False"/>
             <local:NumberBox x:Name="numberbox_hours_played" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Center" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Center" Width="167" Height="20" IsEnabled="False"/>
 
             <!--  Combo Box Sorting Options  -->
