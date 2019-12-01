@@ -56,6 +56,11 @@ namespace GameTracker
                 
                 //deserialize xml file in XmlReader to an ObservableCollection
                 list = (ObservableCollection<videoGame>)serializer.Deserialize(reader);
+
+                foreach(videoGame game in list)
+                {
+                    game.update_image();
+                }
             }
 
             //return the new ObservableCollection
@@ -123,6 +128,9 @@ namespace GameTracker
                     selected_game.hoursString = "NA";
                     selected_game.hours = 0;
                 }
+
+                selected_game.image_link = texbox_image_url.Text;
+                selected_game.update_image();
 
                 //save changes to file
                 save_games();
@@ -230,7 +238,8 @@ namespace GameTracker
                         new XElement("end_date", game.endDate),
                         new XElement("end_date_string", game.endDateString),
                         new XElement("hours", game.hours),
-                        new XElement("hours_string", game.hoursString)
+                        new XElement("hours_string", game.hoursString),
+                        new XElement("image_link", game.image_link)
                     )
                 );
             }
@@ -279,6 +288,7 @@ namespace GameTracker
             combobox_beaten.IsEnabled = true;
             combobox_want_to_beat.IsEnabled = true;
             datepicker_start_date.IsEnabled = true;
+            texbox_image_url.IsEnabled = true;
 
             //selected game in datagrid
             videoGame current_game = (videoGame) datagrid_games.SelectedItem;
@@ -336,6 +346,8 @@ namespace GameTracker
                 numberbox_hours_played.IsEnabled = true;
                 numberbox_hours_played.Text = Convert.ToString(current_game.hours);
             }
+
+            texbox_image_url.Text = current_game.image_link;
         }
 
         //if selected file is changed, save current file and open new file

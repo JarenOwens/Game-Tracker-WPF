@@ -38,6 +38,7 @@
             <Label x:Name="label_name" Grid.Column="1" Content="Name" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="80" FontSize="9"/>
             <Label x:Name="label_beaten" Grid.Column="1" Grid.Row="1" Content="Beaten?" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="80" FontSize="9"/>
             <Label x:Name="label_want_to_beat" Grid.Column="1" Grid.Row="2" Content="Want to Beat?" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="80" FontSize="9"/>
+            <Label x:Name="label_image_url" Grid.Column="1" Grid.Row="3" Content="Image URL" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="80" FontSize="9" />
             <TextBox x:Name="textbox_name" Grid.Column="2" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Height="20" IsEnabled="False"/>
             <ComboBox x:Name="combobox_beaten" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Height="20" SelectionChanged="combobox_beaten_SelectionChanged" IsEnabled="False">
                 <ComboBoxItem Content="Yes"/>
@@ -49,6 +50,7 @@
                 <ComboBoxItem Content="Yes"/>
                 <ComboBoxItem Content="No"/>
             </ComboBox>
+            <TextBox x:Name="texbox_image_url" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Height="20" IsEnabled="False" />
             <Label x:Name="label_start_date" Grid.Column="3" Content="Start Date" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="9" Width="78" Height="22"/>
             <Label x:Name="label_end_date" Grid.Column="3" Grid.Row="1" Content="End Date" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="78" FontSize="9"/>
             <Label x:Name="label_hours_played" Grid.Column="3" Grid.Row="2" Content="Hours Played" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="78" FontSize="9"/>
@@ -72,12 +74,48 @@
 
         </Grid>
         <DataGrid x:Name="datagrid_games" Grid.Row="1" AutoGenerateColumns="False" FontSize="15" IsReadOnly="True" SelectionMode="Single" SelectionChanged="datagrid_games_SelectionChanged" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,1,0,0">
+            <DataGrid.Resources>
+                <local:image_to_imagesource_converter x:Key="imageConverter" />
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Height" Value="100" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Height" Value="30" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn  Header="Name" Width="3*" CanUserResize="False" Binding="{Binding name}" />
+                <DataGridTemplateColumn Header="Image" Width="*" CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image x:Name="cell_image" Source="{Binding Path=image, Converter={StaticResource imageConverter}}" IsEnabled="False">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="MaxHeight" Value="100" />
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn  Header="Name" Width="3*" CanUserResize="False" Binding="{Binding name}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="MaxHeight" Value="100" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Beaten?" Width="*" CanUserResize="False" Binding="{Binding beaten}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="MaxHeight" Value="100" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding beaten}" Value="Yes">
                                     <Setter Property="Background" Value="LightGreen" />
@@ -96,13 +134,37 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Want to Beat?" Width="*" CanUserResize="False" Binding="{Binding wantToBeat}" />
+                <DataGridTextColumn Header="Want to Beat?" Width="*" CanUserResize="False" Binding="{Binding wantToBeat}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="MaxHeight" Value="100" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Start Date" Width="2*" CanUserResize="False" Binding="{Binding startDateString}" />
+                <DataGridTextColumn Header="Start Date" Width="2*" CanUserResize="False" Binding="{Binding startDateString}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="MaxHeight" Value="100" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
 
-                <DataGridTextColumn Header="End Date" Width="2*" CanUserResize="False" Binding="{Binding endDateString}" />
+                <DataGridTextColumn Header="End Date" Width="2*" CanUserResize="False" Binding="{Binding endDateString}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="MaxHeight" Value="100" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Hours Played" Width="*" CanUserResize="False" Binding="{Binding hoursString}" />
+                <DataGridTextColumn Header="Hours Played" Width="*" CanUserResize="False" Binding="{Binding hoursString}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="MaxHeight" Value="100" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
 
             </DataGrid.Columns>
         </DataGrid>
