@@ -2,6 +2,8 @@
 Used to track played video games.
 
 ## Download
+Be sure to install .NET Core 3.0 Runtime [here](https://dotnet.microsoft.com/download/dotnet-core/current/runtime) before using the program.
+
 [Release Version](https://github.com/JarenOwens/Game-Tracker-WPF/raw/master/Game%20Tracker%20WPF.rar)
 
 ## Description
