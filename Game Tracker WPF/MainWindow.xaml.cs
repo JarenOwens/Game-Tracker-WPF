@@ -149,10 +149,78 @@ namespace GameTracker
                 }
                 catch (Exception)
                 {
-                    throw;
+
                 }
                 selected_game.update_image();
 
+                if(checkbox_rating_type.IsChecked == false)
+                {
+                    selected_game.rating_type = false;
+                    switch (combobox_rating_numbers.SelectedIndex)
+                    {
+                        case 0:
+                            selected_game.rating = "0";
+                            break;
+                        case 1:
+                            selected_game.rating = "1";
+                            break;
+                        case 2:
+                            selected_game.rating = "2";
+                            break;
+                        case 3:
+                            selected_game.rating = "3";
+                            break;
+                        case 4:
+                            selected_game.rating = "4";
+                            break;
+                        case 5:
+                            selected_game.rating = "5";
+                            break;
+                        case 6:
+                            selected_game.rating = "6";
+                            break;
+                        case 7:
+                            selected_game.rating = "7";
+                            break;
+                        case 8:
+                            selected_game.rating = "8";
+                            break;
+                        case 9:
+                            selected_game.rating = "9";
+                            break;
+                        case 10:
+                            selected_game.rating = "10";
+                            break;
+                        default:
+                            selected_game.rating = "NA";
+                            break;
+                    }
+                }
+                else
+                {
+                    selected_game.rating_type = true;
+                    switch (combobox_rating_letters.SelectedIndex)
+                    {
+                        case 0:
+                            selected_game.rating = "F";
+                            break;
+                        case 1:
+                            selected_game.rating = "D";
+                            break;
+                        case 2:
+                            selected_game.rating = "C";
+                            break;
+                        case 3:
+                            selected_game.rating = "B";
+                            break;
+                        case 4:
+                            selected_game.rating = "A";
+                            break;
+                        default:
+                            selected_game.rating = "NA";
+                            break;
+                    }
+                }
                 //save changes to file
                 save_games();
                 //refresh datagrid to reflect changes
@@ -211,6 +279,15 @@ namespace GameTracker
 
             settings.sort_setting = combobox_sort.Text;
 
+            settings.image_column_visibility = checkbox_image.IsChecked ?? true;
+            settings.name_column_visibility = checkbox_name.IsChecked ?? true;
+            settings.beaten_column_visibility = checkbox_beaten.IsChecked ?? true;
+            settings.wanttobeat_column_visibility = checkbox_want_to_beat.IsChecked ?? true;
+            settings.startdate_column_visibility = checkbox_start_date.IsChecked ?? true;
+            settings.enddate_column_visibility = checkbox_end_date.IsChecked ?? true;
+            settings.hoursplayed_column_visibility = checkbox_hours_played.IsChecked ?? true;
+            settings.rating_column_visibility = checkbox_rating.IsChecked ?? true;
+
             settings.save_settings();
         }
 
@@ -231,6 +308,15 @@ namespace GameTracker
                 //load last opened file
                 xml_file_path = settings.xml_file_path;
                 combobox_year.SelectedIndex = combobox_year.Items.IndexOf(xml_file_path);
+
+                checkbox_image.IsChecked = settings.image_column_visibility;
+                checkbox_name.IsChecked = settings.name_column_visibility;
+                checkbox_beaten.IsChecked = settings.beaten_column_visibility;
+                checkbox_want_to_beat.IsChecked = settings.wanttobeat_column_visibility;
+                checkbox_start_date.IsChecked = settings.startdate_column_visibility;
+                checkbox_end_date.IsChecked = settings.enddate_column_visibility;
+                checkbox_hours_played.IsChecked = settings.hoursplayed_column_visibility;
+                checkbox_rating.IsChecked = settings.rating_column_visibility;
             }
             catch (Exception)
             {
@@ -277,7 +363,9 @@ namespace GameTracker
                         new XElement("end_date_string", game.endDateString),
                         new XElement("hours", game.hours),
                         new XElement("hours_string", game.hoursString),
-                        new XElement("image_link", game.image_link)
+                        new XElement("image_link", game.image_link),
+                        new XElement("rating", game.rating),
+                        new XElement("rating_type", game.rating_type)
                     )
                 );
             }
@@ -300,6 +388,8 @@ namespace GameTracker
             load_xml_files();
             //load settings into application
             load_settings();
+
+            disable_gui_elements();
             
             //select sort setting in combobox found in settings file
             foreach(ComboBoxItem item in combobox_sort.Items)
@@ -312,21 +402,42 @@ namespace GameTracker
             }
         }
 
+        private void enable_gui_elements()
+        {
+            textbox_name.IsEnabled = true;
+            combobox_beaten.IsEnabled = true;
+            combobox_want_to_beat.IsEnabled = true;
+            datepicker_start_date.IsEnabled = true;
+            texbox_image_url.IsEnabled = true;
+            combobox_rating_letters.IsEnabled = true;
+            combobox_rating_numbers.IsEnabled = true;
+            checkbox_rating_type.IsEnabled = true;
+        }
+
+        private void disable_gui_elements()
+        {
+            textbox_name.IsEnabled = false;
+            combobox_beaten.IsEnabled = false;
+            combobox_want_to_beat.IsEnabled = false;
+            datepicker_start_date.IsEnabled = false;
+            texbox_image_url.IsEnabled = false;
+            combobox_rating_letters.IsEnabled = false;
+            combobox_rating_numbers.IsEnabled = false;
+            checkbox_rating_type.IsEnabled = false;
+        }
+
         //fill gui with data of selected game
         private void datagrid_games_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //return if nothing is selected
             if(datagrid_games.SelectedItems.Count < 1)
             {
+                disable_gui_elements();
                 return;
             }
-            
+
             //re-enable gui elements
-            textbox_name.IsEnabled = true;
-            combobox_beaten.IsEnabled = true;
-            combobox_want_to_beat.IsEnabled = true;
-            datepicker_start_date.IsEnabled = true;
-            texbox_image_url.IsEnabled = true;
+            enable_gui_elements();
 
             //selected game in datagrid
             videoGame current_game = (videoGame) datagrid_games.SelectedItem;
@@ -389,6 +500,90 @@ namespace GameTracker
             }
 
             texbox_image_url.Text = current_game.image_link;
+
+            if (!current_game.rating_type)
+            {
+                checkbox_rating_type.IsChecked = false;
+                combobox_rating_letters.Visibility = Visibility.Collapsed;
+                combobox_rating_numbers.Visibility = Visibility.Visible;
+                
+                try
+                {
+                    int rating = int.Parse(current_game.rating);
+                    switch (rating)
+                    {
+                        case 0:
+                            combobox_rating_numbers.SelectedIndex = 0;
+                            break;
+                        case 1:
+                            combobox_rating_numbers.SelectedIndex = 1;
+                            break;
+                        case 2:
+                            combobox_rating_numbers.SelectedIndex = 2;
+                            break;
+                        case 3:
+                            combobox_rating_numbers.SelectedIndex = 3;
+                            break;
+                        case 4:
+                            combobox_rating_numbers.SelectedIndex = 4;
+                            break;
+                        case 5:
+                            combobox_rating_numbers.SelectedIndex = 5;
+                            break;
+                        case 6:
+                            combobox_rating_numbers.SelectedIndex = 6;
+                            break;
+                        case 7:
+                            combobox_rating_numbers.SelectedIndex = 7;
+                            break;
+                        case 8:
+                            combobox_rating_numbers.SelectedIndex = 8;
+                            break;
+                        case 9:
+                            combobox_rating_numbers.SelectedIndex = 9;
+                            break;
+                        case 10:
+                            combobox_rating_numbers.SelectedIndex = 10;
+                            break;
+                        default:
+                            combobox_rating_numbers.SelectedIndex = 11;
+                            break;
+                    }
+                }
+                catch (Exception)
+                {
+                    combobox_rating_numbers.SelectedIndex = 11;
+                }
+                combobox_rating_letters.SelectedIndex = 5;
+            }
+            else
+            {
+                checkbox_rating_type.IsChecked = true;
+                combobox_rating_numbers.Visibility = Visibility.Collapsed;
+                combobox_rating_letters.Visibility = Visibility.Visible;
+                switch (current_game.rating)
+                {
+                    case "F":
+                        combobox_rating_letters.SelectedIndex = 0;
+                        break;
+                    case "D":
+                        combobox_rating_letters.SelectedIndex = 1;
+                        break;
+                    case "C":
+                        combobox_rating_letters.SelectedIndex = 2;
+                        break;
+                    case "B":
+                        combobox_rating_letters.SelectedIndex = 3;
+                        break;
+                    case "A":
+                        combobox_rating_letters.SelectedIndex = 4;
+                        break;
+                    default:
+                        combobox_rating_letters.SelectedIndex = 5;
+                        break;
+                }
+                combobox_rating_numbers.SelectedIndex = 11;
+            }
         }
 
         //if selected file is changed, save current file and open new file
@@ -522,38 +717,358 @@ namespace GameTracker
             }
         }
 
+        private void sort_rating_ascending()
+        {
+            try
+            {
+                ObservableCollection<videoGame> zero_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> one_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> two_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> three_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> four_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> five_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> six_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> seven_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> eight_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> nine_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> ten_collection = new ObservableCollection<videoGame>();
+
+                ObservableCollection<videoGame> F_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> D_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> C_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> B_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> A_collection = new ObservableCollection<videoGame>();
+
+                ObservableCollection<videoGame> NA_collection = new ObservableCollection<videoGame>();
+                foreach (videoGame game in game_list)
+                {
+                    if(game.rating_type == false && game.rating != "NA")
+                    {
+                        switch (Int32.Parse(game.rating))
+                        {
+                            case 0:
+                                zero_collection.Add(game);
+                                break;
+                            case 1:
+                                one_collection.Add(game);
+                                break;
+                            case 2:
+                                two_collection.Add(game);
+                                break;
+                            case 3:
+                                three_collection.Add(game);
+                                break;
+                            case 4:
+                                four_collection.Add(game);
+                                break;
+                            case 5:
+                                five_collection.Add(game);
+                                break;
+                            case 6:
+                                six_collection.Add(game);
+                                break;
+                            case 7:
+                                seven_collection.Add(game);
+                                break;
+                            case 8:
+                                eight_collection.Add(game);
+                                break;
+                            case 9:
+                                nine_collection.Add(game);
+                                break;
+                            case 10:
+                                ten_collection.Add(game);
+                                break;
+                            default:
+                                NA_collection.Add(game);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (game.rating)
+                        {
+                            case "F":
+                                F_collection.Add(game);
+                                break;
+                            case "D":
+                                D_collection.Add(game);
+                                break;
+                            case "C":
+                                C_collection.Add(game);
+                                break;
+                            case "B":
+                                B_collection.Add(game);
+                                break;
+                            case "A":
+                                A_collection.Add(game);
+                                break;
+                            default:
+                                NA_collection.Add(game);
+                                break;
+                        }
+                    }
+                }
+
+                ObservableCollection<videoGame> sorted_list = new ObservableCollection<videoGame>();
+                foreach(videoGame game in zero_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in one_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in two_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in three_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in four_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in five_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in six_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in seven_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in eight_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in nine_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in ten_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in F_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in D_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in C_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in B_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in A_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in NA_collection)
+                {
+                    sorted_list.Add(game);
+                }
+
+                game_list = sorted_list;
+                datagrid_games.ItemsSource = null;
+                datagrid_games.ItemsSource = game_list;
+                datagrid_games.Items.Refresh();
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void sort_rating_descending()
+        {
+            try
+            {
+                ObservableCollection<videoGame> zero_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> one_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> two_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> three_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> four_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> five_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> six_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> seven_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> eight_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> nine_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> ten_collection = new ObservableCollection<videoGame>();
+
+                ObservableCollection<videoGame> F_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> D_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> C_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> B_collection = new ObservableCollection<videoGame>();
+                ObservableCollection<videoGame> A_collection = new ObservableCollection<videoGame>();
+
+                ObservableCollection<videoGame> NA_collection = new ObservableCollection<videoGame>();
+                foreach (videoGame game in game_list)
+                {
+                    if (game.rating_type == false && game.rating != "NA")
+                    {
+                        switch (Int32.Parse(game.rating))
+                        {
+                            case 0:
+                                zero_collection.Add(game);
+                                break;
+                            case 1:
+                                one_collection.Add(game);
+                                break;
+                            case 2:
+                                two_collection.Add(game);
+                                break;
+                            case 3:
+                                three_collection.Add(game);
+                                break;
+                            case 4:
+                                four_collection.Add(game);
+                                break;
+                            case 5:
+                                five_collection.Add(game);
+                                break;
+                            case 6:
+                                six_collection.Add(game);
+                                break;
+                            case 7:
+                                seven_collection.Add(game);
+                                break;
+                            case 8:
+                                eight_collection.Add(game);
+                                break;
+                            case 9:
+                                nine_collection.Add(game);
+                                break;
+                            case 10:
+                                ten_collection.Add(game);
+                                break;
+                            default:
+                                NA_collection.Add(game);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (game.rating)
+                        {
+                            case "F":
+                                F_collection.Add(game);
+                                break;
+                            case "D":
+                                D_collection.Add(game);
+                                break;
+                            case "C":
+                                C_collection.Add(game);
+                                break;
+                            case "B":
+                                B_collection.Add(game);
+                                break;
+                            case "A":
+                                A_collection.Add(game);
+                                break;
+                            default:
+                                NA_collection.Add(game);
+                                break;
+                        }
+                    }
+                }
+
+                ObservableCollection<videoGame> sorted_list = new ObservableCollection<videoGame>();
+                foreach (videoGame game in A_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in B_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in C_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in D_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in F_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in ten_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in nine_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in eight_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in seven_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in six_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in five_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in four_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in three_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in two_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in one_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in zero_collection)
+                {
+                    sorted_list.Add(game);
+                }
+                foreach (videoGame game in NA_collection)
+                {
+                    sorted_list.Add(game);
+                }
+
+                game_list = sorted_list;
+                datagrid_games.ItemsSource = null;
+                datagrid_games.ItemsSource = game_list;
+                datagrid_games.Items.Refresh();
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
         //if combobox_sort is changed sort by appropiate selection
         private void combobox_sort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch (combobox_sort.SelectedIndex)
-            {
-                case 0:
-                    sort_alphabetically_descending();
-                    break;
-                case 1:
-                    sort_alphabetically_ascending();
-                    break;
-                case 2:
-                    sort_start_date_descending();
-                    break;
-                case 3:
-                    sort_start_date_ascending();
-                    break;
-                case 4:
-                    sort_end_date_descending();
-                    break;
-                case 5:
-                    sort_end_date_ascending();
-                    break;
-                case 6:
-                    sort_hours_descending();
-                    break;
-                case 7:
-                    sort_hours_ascending();
-                    break;
-                default:
-                    break;
-            }
+            sort();
         }
 
         //if new file button is pressed create new file using the year if it doesn't already exist, otherwise load that file
@@ -616,9 +1131,27 @@ namespace GameTracker
                 case 7:
                     sort_hours_ascending();
                     break;
+                case 8:
+                    sort_rating_descending();
+                    break;
+                case 9:
+                    sort_rating_ascending();
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void checkbox_rating_type_Unchecked(object sender, RoutedEventArgs e)
+        {
+            combobox_rating_letters.Visibility = Visibility.Collapsed;
+            combobox_rating_numbers.Visibility = Visibility.Visible;
+        }
+
+        private void checkbox_rating_type_Checked(object sender, RoutedEventArgs e)
+        {
+            combobox_rating_numbers.Visibility = Visibility.Collapsed;
+            combobox_rating_letters.Visibility = Visibility.Visible;
         }
     }
 

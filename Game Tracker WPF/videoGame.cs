@@ -46,6 +46,10 @@ namespace Game_Tracker_1
         [XmlElement("image_link")]
         public string image_link { get; set; }
         public System.Drawing.Image image { get; set; }
+        [XmlElement("rating")]
+        public string rating { get; set; }
+        [XmlElement("rating_type")]
+        public bool rating_type { get; set; }
 
         public videoGame()
         {
@@ -60,6 +64,8 @@ namespace Game_Tracker_1
             hoursString = "NA";
             image_link = "";
             image = null;
+            rating = "NA";
+            rating_type = false;
 
             update_image();
         }
@@ -122,6 +128,8 @@ namespace Game_Tracker_1
             info.AddValue("hours", hours);
             info.AddValue("hoursString", hoursString);
             info.AddValue("image_link", image_link);
+            info.AddValue("rating", rating);
+            info.AddValue("rating_type", rating_type);
         }
 
         public videoGame(SerializationInfo info, StreamingContext context)
@@ -138,6 +146,8 @@ namespace Game_Tracker_1
                 hours = (double)info.GetValue("hours", typeof(double));
                 hoursString = (string)info.GetValue("hoursString", typeof(string));
                 image_link = (string)info.GetValue("image_link", typeof(string));
+                rating = (string)info.GetValue("rating", typeof(string));
+                rating_type = (bool)info.GetValue("rating_type", typeof(bool));
             }
             catch (Exception)
             {

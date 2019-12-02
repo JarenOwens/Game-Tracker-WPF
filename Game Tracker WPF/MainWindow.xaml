@@ -4,8 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameTracker"
+        xmlns:common="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
         mc:Ignorable="d"
         Title="Game Tracker" Height="346" Width="986" Closing="Game_Tracker_Closing" Loaded="Game_Tracker_Loaded">
+
+    <Window.Resources>
+        <CheckBox x:Key="image_check" IsChecked="True"/>
+        <CheckBox x:Key="name_check" IsChecked="True"/>
+        <CheckBox x:Key="beaten_check" IsChecked="True"/>
+        <CheckBox x:Key="wanttobeat_check" IsChecked="True"/>
+        <CheckBox x:Key="startdate_check" IsChecked="True"/>
+        <CheckBox x:Key="enddate_check" IsChecked="True"/>
+        <CheckBox x:Key="hoursplayed_check" IsChecked="True"/>
+        <CheckBox x:Key="rating_check" IsChecked="True"/>
+    </Window.Resources>
     <Grid x:Name="grid_main_window" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -54,13 +66,43 @@
             <Label x:Name="label_start_date" Grid.Column="3" Content="Start Date" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="9" Width="78" Height="22"/>
             <Label x:Name="label_end_date" Grid.Column="3" Grid.Row="1" Content="End Date" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="78" FontSize="9"/>
             <Label x:Name="label_hours_played" Grid.Column="3" Grid.Row="2" Content="Hours Played" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="78" FontSize="9"/>
-            <Label x:Name="label_sort" Grid.Column="3" Grid.Row="3" Content="Sort" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="78" FontSize="9"/>
+            <Label x:Name="label_rating" Grid.Column="3" Grid.Row="3" Content="Rating" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="78" FontSize="9" />
+            <Label x:Name="label_sort" Grid.Column="3" Grid.Row="4" Content="Sort" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="78" FontSize="9"/>
+
             <DatePicker x:Name="datepicker_start_date" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="170" IsEnabled="False"/>
             <DatePicker x:Name="datepicker_end_date" Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="24" Width="170" IsEnabled="False"/>
             <local:NumberBox x:Name="numberbox_hours_played" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Center" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Center" Width="167" Height="20" IsEnabled="False"/>
 
+
+
+            <ComboBox x:Name="combobox_rating_numbers" Grid.Column="4" Grid.Row="3" HorizontalAlignment="Left" Margin="2.5 0 2.5 0" VerticalAlignment="Center" Width="154" Height="20" SelectedIndex="11" IsEnabled="False">
+                <ComboBoxItem Content="0/10"/>
+                <ComboBoxItem Content="1/10"/>
+                <ComboBoxItem Content="2/10"/>
+                <ComboBoxItem Content="3/10"/>
+                <ComboBoxItem Content="4/10"/>
+                <ComboBoxItem Content="5/10"/>
+                <ComboBoxItem Content="6/10"/>
+                <ComboBoxItem Content="7/10"/>
+                <ComboBoxItem Content="8/10"/>
+                <ComboBoxItem Content="9/10"/>
+                <ComboBoxItem Content="10/10"/>
+                <ComboBoxItem Content="NA"/>
+            </ComboBox>
+
+            <ComboBox x:Name="combobox_rating_letters" Grid.Column="4" Grid.Row="3" HorizontalAlignment="Left" Margin="2.5 0 2.5 0" VerticalAlignment="Center" Width="154" Height="20" Visibility="Collapsed" SelectedIndex="5">
+                <ComboBoxItem Content="F"/>
+                <ComboBoxItem Content="D"/>
+                <ComboBoxItem Content="C"/>
+                <ComboBoxItem Content="B"/>
+                <ComboBoxItem Content="A"/>
+                <ComboBoxItem Content="NA"/>
+            </ComboBox>
+
+            <CheckBox x:Name="checkbox_rating_type" Grid.Column="4" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="154 0 0 0" Unchecked="checkbox_rating_type_Unchecked" Checked="checkbox_rating_type_Checked" />
+
             <!--  Combo Box Sorting Options  -->
-            <ComboBox x:Name="combobox_sort" Grid.Column="4" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="170" Height="20" SelectedIndex="0" SelectionChanged="combobox_sort_SelectionChanged">
+            <ComboBox x:Name="combobox_sort" Grid.Column="4" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Width="170" Height="20" SelectedIndex="0" SelectionChanged="combobox_sort_SelectionChanged">
                 <ComboBoxItem Content="Alphabetically Descending"/>
                 <ComboBoxItem Content="Alphabetically Ascending"/>
                 <ComboBoxItem Content="Start Date Descending"/>
@@ -69,13 +111,102 @@
                 <ComboBoxItem Content="End Date Ascending"/>
                 <ComboBoxItem Content="Hours Played Descending"/>
                 <ComboBoxItem Content="Hours Played Ascending"/>
+                <ComboBoxItem Content="Rating Descending"/>
+                <ComboBoxItem Content="Rating Ascending"/>
             </ComboBox>
             <ComboBox x:Name="combobox_year" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="20" SelectionChanged="combobox_year_SelectionChanged" Grid.Row="1"/>
+            <StackPanel Orientation="Vertical" Grid.ColumnSpan="2" Grid.Column="5" HorizontalAlignment="Stretch" Height="136" Margin="0,2,0,0" Grid.RowSpan="5" Grid.Row="0" VerticalAlignment="Center" Width="300" Background="White">
+                <Label Content="Toggle Columns" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10" />
+                <Grid Height="109" Width="300">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition>
+                            <ColumnDefinition.Width>*</ColumnDefinition.Width>
+                        </ColumnDefinition>
+                        <ColumnDefinition>
+                            <ColumnDefinition.Width>*</ColumnDefinition.Width>
+                        </ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition>
+                                <ColumnDefinition.Width>5*</ColumnDefinition.Width>
+                            </ColumnDefinition>
+                            <ColumnDefinition>
+                                <ColumnDefinition.Width>*</ColumnDefinition.Width>
+                            </ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="Image"/>
+                            <Label Content="Name"/>
+                            <Label Content="Beaten?"/>
+                            <Label Content="Want to Beat?"/>
+                        </StackPanel>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                            </Grid.RowDefinitions>
+                            <CheckBox x:Name="checkbox_image" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding IsChecked, Source={StaticResource image_check}}"/>
+                            <CheckBox x:Name="checkbox_name" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsChecked, Source={StaticResource name_check}}"/>
+                            <CheckBox x:Name="checkbox_beaten" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsChecked, Source={StaticResource beaten_check}}"/>
+                            <CheckBox x:Name="checkbox_want_to_beat" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsChecked, Source={StaticResource wanttobeat_check}}"/>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition>
+                                <ColumnDefinition.Width>5*</ColumnDefinition.Width>
+                            </ColumnDefinition>
+                            <ColumnDefinition>
+                                <ColumnDefinition.Width>*</ColumnDefinition.Width>
+                            </ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="Start Date"/>
+                            <Label Content="End Date"/>
+                            <Label Content="Hours Played"/>
+                            <Label Content="Rating"/>
+                        </StackPanel>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                            </Grid.RowDefinitions>
+                            <CheckBox x:Name="checkbox_start_date" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding IsChecked, Source={StaticResource startdate_check}}"/>
+                            <CheckBox x:Name="checkbox_end_date" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsChecked, Source={StaticResource enddate_check}}"/>
+                            <CheckBox x:Name="checkbox_hours_played" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsChecked, Source={StaticResource hoursplayed_check}}"/>
+                            <CheckBox x:Name="checkbox_rating" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding IsChecked, Source={StaticResource rating_check}}"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </StackPanel>
 
         </Grid>
+        <!--  DataGrid to display games  -->
         <DataGrid x:Name="datagrid_games" Grid.Row="1" AutoGenerateColumns="False" FontSize="15" IsReadOnly="True" SelectionMode="Single" SelectionChanged="datagrid_games_SelectionChanged" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,1,0,0">
             <DataGrid.Resources>
                 <local:image_to_imagesource_converter x:Key="imageConverter" />
+                <common:BooleanToVisibilityConverter x:Key="boolean" />
             </DataGrid.Resources>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
@@ -90,7 +221,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Image" Width="*" CanUserResize="False">
+                <DataGridTemplateColumn Header="Image" Width="*" CanUserResize="False" Visibility="{Binding Source={StaticResource image_check}, Path=IsChecked, Converter={StaticResource boolean} }">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image x:Name="cell_image" Source="{Binding Path=image, Converter={StaticResource imageConverter}}" IsEnabled="False">
@@ -104,7 +235,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn  Header="Name" Width="3*" CanUserResize="False" Binding="{Binding name}">
+                <DataGridTextColumn  Header="Name" CanUserSort="False" Width="3*" CanUserResize="False" Binding="{Binding name}" Visibility="{Binding Source={StaticResource name_check}, Path=IsChecked, Converter={StaticResource boolean} }">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="MaxHeight" Value="100" />
@@ -112,7 +243,7 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Beaten?" Width="*" CanUserResize="False" Binding="{Binding beaten}">
+                <DataGridTextColumn Header="Beaten?" CanUserSort="False" Width="*" CanUserResize="False" Binding="{Binding beaten}" Visibility="{Binding Source={StaticResource beaten_check}, Path=IsChecked, Converter={StaticResource boolean} }">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
                             <Setter Property="MaxHeight" Value="100" />
@@ -134,7 +265,7 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Want to Beat?" Width="*" CanUserResize="False" Binding="{Binding wantToBeat}">
+                <DataGridTextColumn Header="Want to Beat?" CanUserSort="False" Width="*" CanUserResize="False" Binding="{Binding wantToBeat}" Visibility="{Binding Source={StaticResource wanttobeat_check}, Path=IsChecked, Converter={StaticResource boolean} }">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="MaxHeight" Value="100" />
@@ -142,7 +273,7 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Start Date" Width="2*" CanUserResize="False" Binding="{Binding startDateString}">
+                <DataGridTextColumn Header="Start Date" CanUserSort="False" Width="2*" CanUserResize="False" Binding="{Binding startDateString}" Visibility="{Binding Source={StaticResource startdate_check}, Path=IsChecked, Converter={StaticResource boolean} }">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="MaxHeight" Value="100" />
@@ -150,7 +281,7 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="End Date" Width="2*" CanUserResize="False" Binding="{Binding endDateString}">
+                <DataGridTextColumn Header="End Date" CanUserSort="False" Width="2*" CanUserResize="False" Binding="{Binding endDateString}" Visibility="{Binding Source={StaticResource enddate_check}, Path=IsChecked, Converter={StaticResource boolean} }">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="MaxHeight" Value="100" />
@@ -158,7 +289,7 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Hours Played" Width="*" CanUserResize="False" Binding="{Binding hoursString}">
+                <DataGridTextColumn Header="Hours Played" CanUserSort="False" Width="*" CanUserResize="False" Binding="{Binding hoursString}" Visibility="{Binding Source={StaticResource hoursplayed_check}, Path=IsChecked, Converter={StaticResource boolean} }">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="MaxHeight" Value="100" />
@@ -166,6 +297,32 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
 
+                <DataGridTemplateColumn Header="Rating" CanUserSort="False" Width="*" CanUserResize="False" Visibility="{Binding Source={StaticResource rating_check}, Path=IsChecked, Converter={StaticResource boolean} }">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding rating}" />
+                                <TextBlock Text="/10">
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding rating_type}" Value="false">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding rating_type}" Value="true">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding rating}" Value="NA">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
