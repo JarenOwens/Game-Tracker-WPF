@@ -115,7 +115,7 @@
                 <ComboBoxItem Content="Rating Ascending"/>
             </ComboBox>
             <ComboBox x:Name="combobox_year" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="20" SelectionChanged="combobox_year_SelectionChanged" Grid.Row="1"/>
-            <StackPanel Orientation="Vertical" Grid.ColumnSpan="2" Grid.Column="5" HorizontalAlignment="Stretch" Height="136" Margin="0,2,0,0" Grid.RowSpan="5" Grid.Row="0" VerticalAlignment="Center" Width="300" Background="White">
+            <StackPanel Orientation="Vertical" Grid.ColumnSpan="2" Grid.Column="5" HorizontalAlignment="Left" Height="136" Margin="5,2,0,0" Grid.RowSpan="5" Grid.Row="0" VerticalAlignment="Center" Width="300" Background="White">
                 <Label Content="Toggle Columns" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10" />
                 <Grid Height="109" Width="300">
                     <Grid.ColumnDefinitions>
