@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -28,6 +29,15 @@ namespace GameTracker
 
             sort_setting = "Alphabetically Descending";
 
+            image_column_visibility = true;
+            name_column_visibility = true;
+            beaten_column_visibility = true;
+            wanttobeat_column_visibility = true;
+            startdate_column_visibility = true;
+            enddate_column_visibility = true;
+            hoursplayed_column_visibility = true;
+            rating_column_visibility = true;
+
             load_settings();
         }
 
@@ -41,6 +51,14 @@ namespace GameTracker
         public string xml_file_path { get; set; }
         //saves last selected sort setting
         public string sort_setting { get; set; }
+        public bool image_column_visibility { get; set; }
+        public bool name_column_visibility { get; set; }
+        public bool beaten_column_visibility { get; set; }
+        public bool wanttobeat_column_visibility { get; set; }
+        public bool startdate_column_visibility { get; set; }
+        public bool enddate_column_visibility { get; set; }
+        public bool hoursplayed_column_visibility { get; set; }
+        public bool rating_column_visibility { get; set; }
 
         //load settings from xml file
         private void load_settings()
@@ -78,6 +96,14 @@ namespace GameTracker
                     xml_file_path = settings_file.Element("xml_file_path").Value;
                     //read last sort setting
                     sort_setting = settings_file.Element("sort_setting").Value;
+                    image_column_visibility = XmlConvert.ToBoolean(settings_file.Element("image_column_visibility").Value);
+                    name_column_visibility = XmlConvert.ToBoolean(settings_file.Element("name_column_visibility").Value);
+                    beaten_column_visibility = XmlConvert.ToBoolean(settings_file.Element("beaten_column_visibility").Value);
+                    wanttobeat_column_visibility = XmlConvert.ToBoolean(settings_file.Element("wanttobeat_column_visibility").Value);
+                    startdate_column_visibility = XmlConvert.ToBoolean(settings_file.Element("startdate_column_visibility").Value);
+                    enddate_column_visibility = XmlConvert.ToBoolean(settings_file.Element("enddate_column_visibility").Value);
+                    hoursplayed_column_visibility = XmlConvert.ToBoolean(settings_file.Element("hoursplayed_column_visibility").Value);
+                    rating_column_visibility = XmlConvert.ToBoolean(settings_file.Element("rating_column_visibility").Value);
                 }
             }catch{
                 //do nothing
@@ -106,7 +132,15 @@ namespace GameTracker
                     //last opened file
                     new XElement("xml_file_path", xml_file_path),
                     //last sort setting
-                    new XElement("sort_setting", sort_setting)
+                    new XElement("sort_setting", sort_setting),
+                    new XElement("image_column_visibility", image_column_visibility),
+                    new XElement("name_column_visibility", name_column_visibility),
+                    new XElement("beaten_column_visibility", beaten_column_visibility),
+                    new XElement("wanttobeat_column_visibility", wanttobeat_column_visibility),
+                    new XElement("startdate_column_visibility", startdate_column_visibility),
+                    new XElement("enddate_column_visibility", enddate_column_visibility),
+                    new XElement("hoursplayed_column_visibility", hoursplayed_column_visibility),
+                    new XElement("rating_column_visibility", rating_column_visibility)
                 )
             );
             //save XDocument to settings.xml
