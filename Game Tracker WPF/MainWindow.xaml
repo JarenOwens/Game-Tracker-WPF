@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameTracker"
         xmlns:common="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Game Tracker" Height="346" Width="986" Closing="Game_Tracker_Closing" Loaded="Game_Tracker_Loaded">
+        Title="Game Tracker" Height="346" Width="986" Closing="Game_Tracker_Closing" Loaded="Game_Tracker_Loaded" WindowState="Minimized">
 
     <Window.Resources>
         <CheckBox x:Key="image_check" IsChecked="True"/>
@@ -17,6 +18,9 @@
         <CheckBox x:Key="enddate_check" IsChecked="True"/>
         <CheckBox x:Key="hoursplayed_check" IsChecked="True"/>
         <CheckBox x:Key="rating_check" IsChecked="True"/>
+        <SolidColorBrush x:Key="BackgroundColor" Color="White" />
+        <SolidColorBrush x:Key="ForegroundColor" Color="Black" />
+        <SolidColorBrush x:Key="HeaderColor" Color="#FFBBE2FF" />
     </Window.Resources>
     <Grid x:Name="grid_main_window" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
@@ -26,7 +30,15 @@
             <RowDefinition Height="155" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid x:Name="grid_controls" Background="#FFBBE2FF" Height="155" Grid.Column="0">
+        <Grid x:Name="grid_controls" Background="{Binding Source={StaticResource HeaderColor}}" Height="155" Grid.Column="0">
+            <Grid.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="Foreground" Value="{Binding Source={StaticResource ForegroundColor}}" />
+                </Style>
+                <Style TargetType="ComboBox">
+                    <Setter Property="Foreground" Value="{Binding Source={StaticResource ForegroundColor}}" />
+                </Style>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="87"/>
@@ -51,6 +63,64 @@
             <Label x:Name="label_beaten" Grid.Column="1" Grid.Row="1" Content="Beaten?" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="80" FontSize="9"/>
             <Label x:Name="label_want_to_beat" Grid.Column="1" Grid.Row="2" Content="Want to Beat?" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="80" FontSize="9"/>
             <Label x:Name="label_image_url" Grid.Column="1" Grid.Row="3" Content="Image URL" HorizontalAlignment="Center" VerticalAlignment="Center" Height="22" Width="80" FontSize="9" />
+
+            <Grid Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition>
+                        <ColumnDefinition.Width>*</ColumnDefinition.Width>
+                    </ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition>
+                        <RowDefinition.Height>*</RowDefinition.Height>
+                    </RowDefinition>
+                </Grid.RowDefinitions>
+                <Button Content="Customize Window" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="200" Height="20" Click="Button_Click" HorizontalAlignment="Center"  />
+                <StackPanel Width="200" Orientation="Vertical">
+                    <Popup x:Name="popup_customize" Grid.Column="0" IsOpen="False" HorizontalAlignment="Stretch" StaysOpen="False">
+                        <Grid HorizontalAlignment="Stretch" Background="White">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition>
+                                    <ColumnDefinition.Width>3*</ColumnDefinition.Width>
+                                </ColumnDefinition>
+                                <ColumnDefinition>
+                                    <ColumnDefinition.Width>*</ColumnDefinition.Width>
+                                </ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                                <RowDefinition>
+                                    <RowDefinition.Height>*</RowDefinition.Height>
+                                </RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Label Content="Header Background" FontSize="9" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Black" Margin="0 0 0 2.5" />
+                            <Label Content="Table Background" FontSize="9" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Black" Margin="0 0 0 2.5" />
+                            <Label Content="Text Color" FontSize="9" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Black" Margin="0 0 0 2.5"  />
+
+                            <Button x:Name="button_default" Content="Default" HorizontalAlignment="Stretch" Height="25" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Click="button_default_Click" Margin="0 0 0 2.5" />
+                            <Button x:Name="button_close" Content="Close" HorizontalAlignment="Stretch"  Height="25" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Click="button_close_Click" />
+
+                            <xctk:ColorPicker x:Name="color_picker_header" SelectedColor="{Binding Source={StaticResource HeaderColor}, Path=Color}" Grid.Column="1" Grid.Row="0" Margin="0 0 0 2.5" />
+                            <xctk:ColorPicker x:Name="color_picker_table" SelectedColor="{Binding Source={StaticResource BackgroundColor}, Path=Color}" Grid.Column="1" Grid.Row="1" Margin="0 0 0 2.5" />
+                            <xctk:ColorPicker x:Name="color_picker_text" SelectedColor="{Binding Source={StaticResource ForegroundColor}, Path=Color}" Grid.Column="1" Grid.Row="2" Margin="0 0 0 2.5" />
+
+                        </Grid>
+                    </Popup>
+                </StackPanel>
+                
+            </Grid>
+            
             <TextBox x:Name="textbox_name" Grid.Column="2" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" Height="20" IsEnabled="False"/>
             <ComboBox x:Name="combobox_beaten" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Height="20" SelectionChanged="combobox_beaten_SelectionChanged" IsEnabled="False">
                 <ComboBoxItem Content="Yes"/>
@@ -115,7 +185,7 @@
                 <ComboBoxItem Content="Rating Ascending"/>
             </ComboBox>
             <ComboBox x:Name="combobox_year" HorizontalAlignment="Center" VerticalAlignment="Center" Width="150" Height="20" SelectionChanged="combobox_year_SelectionChanged" Grid.Row="1"/>
-            <StackPanel Orientation="Vertical" Grid.ColumnSpan="2" Grid.Column="5" HorizontalAlignment="Left" Height="136" Margin="5,2,0,0" Grid.RowSpan="5" Grid.Row="0" VerticalAlignment="Center" Width="300" Background="White">
+            <StackPanel Orientation="Vertical" Grid.ColumnSpan="2" Grid.Column="5" HorizontalAlignment="Left" Height="136" Margin="5,2,0,0" Grid.RowSpan="5" Grid.Row="0" VerticalAlignment="Center" Width="300">
                 <Label Content="Toggle Columns" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10" />
                 <Grid Height="109" Width="300">
                     <Grid.ColumnDefinitions>
@@ -200,13 +270,20 @@
                     </Grid>
                 </Grid>
             </StackPanel>
-
         </Grid>
         <!--  DataGrid to display games  -->
         <DataGrid x:Name="datagrid_games" Grid.Row="1" AutoGenerateColumns="False" FontSize="15" IsReadOnly="True" SelectionMode="Single" SelectionChanged="datagrid_games_SelectionChanged" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,1,0,0">
             <DataGrid.Resources>
                 <local:image_to_imagesource_converter x:Key="imageConverter" />
                 <common:BooleanToVisibilityConverter x:Key="boolean" />
+                <Style x:Key="CellColor" TargetType="{x:Type DataGridCell}">
+                    <!--  Background Color  -->
+                    <Setter x:Name="BackgroundColor" Property="Background" Value="{Binding Source={StaticResource BackgroundColor}}"/>
+                    <Setter Property="BorderBrush" Value="{Binding Source={StaticResource BackgroundColor}}"/>
+                    <!--  Text Color  -->
+                    <Setter Property="Foreground" Value="{Binding Source={StaticResource ForegroundColor}}"/>
+                    <Setter Property="MaxHeight" Value="100"/>
+                </Style>
             </DataGrid.Resources>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
@@ -221,7 +298,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Image" Width="*" CanUserResize="False" Visibility="{Binding Source={StaticResource image_check}, Path=IsChecked, Converter={StaticResource boolean} }">
+                <DataGridTemplateColumn CellStyle="{Binding Source={StaticResource CellColor}}" Header="Image" Width="*" CanUserResize="False" Visibility="{Binding Source={StaticResource image_check}, Path=IsChecked, Converter={StaticResource boolean} }">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image x:Name="cell_image" Source="{Binding Path=image, Converter={StaticResource imageConverter}}" IsEnabled="False">
@@ -235,13 +312,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn  Header="Name" CanUserSort="False" Width="3*" CanUserResize="False" Binding="{Binding name}" Visibility="{Binding Source={StaticResource name_check}, Path=IsChecked, Converter={StaticResource boolean} }">
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="MaxHeight" Value="100" />
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
+                <DataGridTextColumn  Header="Name" CellStyle="{Binding Source={StaticResource CellColor}}" CanUserSort="False" Width="3*" CanUserResize="False" Binding="{Binding name}" Visibility="{Binding Source={StaticResource name_check}, Path=IsChecked, Converter={StaticResource boolean} }" />
 
                 <DataGridTextColumn Header="Beaten?" CanUserSort="False" Width="*" CanUserResize="False" Binding="{Binding beaten}" Visibility="{Binding Source={StaticResource beaten_check}, Path=IsChecked, Converter={StaticResource boolean} }">
                     <DataGridTextColumn.CellStyle>
@@ -265,39 +336,15 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Want to Beat?" CanUserSort="False" Width="*" CanUserResize="False" Binding="{Binding wantToBeat}" Visibility="{Binding Source={StaticResource wanttobeat_check}, Path=IsChecked, Converter={StaticResource boolean} }">
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="MaxHeight" Value="100" />
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="Want to Beat?" CellStyle="{Binding Source={StaticResource CellColor}}" CanUserSort="False" Width="*" CanUserResize="False" Binding="{Binding wantToBeat}" Visibility="{Binding Source={StaticResource wanttobeat_check}, Path=IsChecked, Converter={StaticResource boolean} }" />
 
-                <DataGridTextColumn Header="Start Date" CanUserSort="False" Width="2*" CanUserResize="False" Binding="{Binding startDateString}" Visibility="{Binding Source={StaticResource startdate_check}, Path=IsChecked, Converter={StaticResource boolean} }">
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="MaxHeight" Value="100" />
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="Start Date" CellStyle="{Binding Source={StaticResource CellColor}}" CanUserSort="False" Width="2*" CanUserResize="False" Binding="{Binding startDateString}" Visibility="{Binding Source={StaticResource startdate_check}, Path=IsChecked, Converter={StaticResource boolean} }"/>
 
-                <DataGridTextColumn Header="End Date" CanUserSort="False" Width="2*" CanUserResize="False" Binding="{Binding endDateString}" Visibility="{Binding Source={StaticResource enddate_check}, Path=IsChecked, Converter={StaticResource boolean} }">
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="MaxHeight" Value="100" />
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="End Date" CellStyle="{Binding Source={StaticResource CellColor}}" CanUserSort="False" Width="2*" CanUserResize="False" Binding="{Binding endDateString}" Visibility="{Binding Source={StaticResource enddate_check}, Path=IsChecked, Converter={StaticResource boolean} }"/>
 
-                <DataGridTextColumn Header="Hours Played" CanUserSort="False" Width="*" CanUserResize="False" Binding="{Binding hoursString}" Visibility="{Binding Source={StaticResource hoursplayed_check}, Path=IsChecked, Converter={StaticResource boolean} }">
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="MaxHeight" Value="100" />
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="Hours Played" CellStyle="{Binding Source={StaticResource CellColor}}" CanUserSort="False" Width="*" CanUserResize="False" Binding="{Binding hoursString}" Visibility="{Binding Source={StaticResource hoursplayed_check}, Path=IsChecked, Converter={StaticResource boolean} }"/>
 
-                <DataGridTemplateColumn Header="Rating" CanUserSort="False" Width="*" CanUserResize="False" Visibility="{Binding Source={StaticResource rating_check}, Path=IsChecked, Converter={StaticResource boolean} }">
+                <DataGridTemplateColumn Header="Rating" CellStyle="{Binding Source={StaticResource CellColor}}" CanUserSort="False" Width="*" CanUserResize="False" Visibility="{Binding Source={StaticResource rating_check}, Path=IsChecked, Converter={StaticResource boolean} }">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">

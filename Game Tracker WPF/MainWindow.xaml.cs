@@ -288,6 +288,10 @@ namespace GameTracker
             settings.hoursplayed_column_visibility = checkbox_hours_played.IsChecked ?? true;
             settings.rating_column_visibility = checkbox_rating.IsChecked ?? true;
 
+            settings.header_color = color_picker_header.SelectedColorText;
+            settings.table_color = color_picker_table.SelectedColorText;
+            settings.text_color = color_picker_text.SelectedColorText;
+
             settings.save_settings();
         }
 
@@ -303,8 +307,6 @@ namespace GameTracker
                 Application.Current.MainWindow.Left = settings.window_position.x;
                 Application.Current.MainWindow.Top = settings.window_position.y;
 
-                Application.Current.MainWindow.WindowState = settings.window_state;
-
                 //load last opened file
                 xml_file_path = settings.xml_file_path;
                 combobox_year.SelectedIndex = combobox_year.Items.IndexOf(xml_file_path);
@@ -317,6 +319,25 @@ namespace GameTracker
                 checkbox_end_date.IsChecked = settings.enddate_column_visibility;
                 checkbox_hours_played.IsChecked = settings.hoursplayed_column_visibility;
                 checkbox_rating.IsChecked = settings.rating_column_visibility;
+
+                System.Windows.Media.Color header_color;
+                System.Windows.Media.Color table_color;
+                System.Windows.Media.Color text_color;
+                try
+                {
+                    
+                    header_color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(settings.header_color);
+                    table_color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(settings.table_color);
+                    text_color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(settings.text_color);
+
+                    color_picker_header.SelectedColor = header_color;
+                    color_picker_table.SelectedColor = table_color;
+                    color_picker_text.SelectedColor = text_color;
+                }
+                catch (Exception)
+                {
+
+                }
             }
             catch (Exception)
             {
@@ -399,6 +420,16 @@ namespace GameTracker
                     combobox_sort.SelectedIndex = combobox_sort.Items.IndexOf(item);
                     break;
                 }
+            }
+
+            switch (settings.window_state)
+            {
+                case WindowState.Maximized:
+                    Game_Tracker.WindowState = WindowState.Maximized;
+                    break;
+                default:
+                    Game_Tracker.WindowState = WindowState.Normal;
+                    break;
             }
         }
 
@@ -1152,6 +1183,25 @@ namespace GameTracker
         {
             combobox_rating_numbers.Visibility = Visibility.Collapsed;
             combobox_rating_letters.Visibility = Visibility.Visible;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            popup_customize.IsOpen = true;
+        }
+
+        private void button_default_Click(object sender, RoutedEventArgs e)
+        {
+            ColorConverter converter = new ColorConverter();
+
+            color_picker_header.SelectedColor = System.Windows.Media.Color.FromArgb(255, 187, 226, 255);
+            color_picker_table.SelectedColor = System.Windows.Media.Color.FromRgb(255, 255, 255);
+            color_picker_text.SelectedColor = System.Windows.Media.Color.FromRgb(0,0,0);
+        }
+
+        private void button_close_Click(object sender, RoutedEventArgs e)
+        {
+            popup_customize.IsOpen = false;
         }
     }
 

@@ -59,6 +59,9 @@ namespace GameTracker
         public bool enddate_column_visibility { get; set; }
         public bool hoursplayed_column_visibility { get; set; }
         public bool rating_column_visibility { get; set; }
+        public string header_color { get; set; }
+        public string table_color { get; set; }
+        public string text_color { get; set; }
 
         //load settings from xml file
         private void load_settings()
@@ -104,6 +107,9 @@ namespace GameTracker
                     enddate_column_visibility = XmlConvert.ToBoolean(settings_file.Element("enddate_column_visibility").Value);
                     hoursplayed_column_visibility = XmlConvert.ToBoolean(settings_file.Element("hoursplayed_column_visibility").Value);
                     rating_column_visibility = XmlConvert.ToBoolean(settings_file.Element("rating_column_visibility").Value);
+                    header_color = settings_file.Element("header_color").Value;
+                    table_color = settings_file.Element("table_color").Value;
+                    text_color = settings_file.Element("text_color").Value;
                 }
             }catch{
                 //do nothing
@@ -140,7 +146,10 @@ namespace GameTracker
                     new XElement("startdate_column_visibility", startdate_column_visibility),
                     new XElement("enddate_column_visibility", enddate_column_visibility),
                     new XElement("hoursplayed_column_visibility", hoursplayed_column_visibility),
-                    new XElement("rating_column_visibility", rating_column_visibility)
+                    new XElement("rating_column_visibility", rating_column_visibility),
+                    new XElement("header_color", header_color),
+                    new XElement("table_color", table_color),
+                    new XElement("text_color", text_color)
                 )
             );
             //save XDocument to settings.xml
