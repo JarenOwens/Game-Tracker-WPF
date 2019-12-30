@@ -1126,9 +1126,11 @@ namespace GameTracker
             {
                 case 0:
                     datepicker_end_date.IsEnabled = true;
+                    numberbox_hours_played.IsEnabled = true;
                     break;
                 default:
                     datepicker_end_date.IsEnabled = false;
+                    numberbox_hours_played.IsEnabled = false;
                     break;
             }
         }
