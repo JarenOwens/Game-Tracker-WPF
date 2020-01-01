@@ -381,6 +381,12 @@
                 <TextBlock x:Name="textblock_total" FontSize="9">0</TextBlock>
             </StatusBarItem>
             <StatusBarItem>
+                <TextBlock FontSize="9">Total Hours:</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="textblock_totalhours" FontSize="9">0</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
                 <TextBlock FontSize="9">Beaten:</TextBlock>
             </StatusBarItem>
             <StatusBarItem>

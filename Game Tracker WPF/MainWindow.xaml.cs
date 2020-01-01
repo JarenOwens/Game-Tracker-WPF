@@ -1221,6 +1221,7 @@ namespace GameTracker
         private void update_status_bar()
         {
             int total = 0;
+            double total_hours = 0;
             int beaten = 0;
             int not_beaten = 0;
             int currently_playing = 0;
@@ -1229,6 +1230,7 @@ namespace GameTracker
             foreach(videoGame videoGame in game_list)
             {
                 total += 1;
+                total_hours += videoGame.hours;
                 switch (videoGame.beaten)
                 {
                     case "Yes":
@@ -1249,6 +1251,7 @@ namespace GameTracker
             }
 
             textblock_total.Text = total.ToString();
+            textblock_totalhours.Text = total_hours.ToString();
             textblock_beaten.Text = beaten.ToString();
             textblock_notbeaten.Text = not_beaten.ToString();
             textblock_currentlyplaying.Text = currently_playing.ToString();
