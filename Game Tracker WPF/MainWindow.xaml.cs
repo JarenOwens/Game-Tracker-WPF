@@ -68,6 +68,8 @@ namespace GameTracker
 
             //return the new ObservableCollection
             return list;
+
+            update_status_bar();
         }
 
         //load files found in xml folder into the combobox
@@ -99,6 +101,8 @@ namespace GameTracker
             datagrid_games.Items.Refresh();
             //change datagrid selected index to the new game
             datagrid_games.SelectedIndex = datagrid_games.Items.Count - 1;
+
+            update_status_bar();
         }
 
         //save changes made to game when button is pressed
@@ -225,6 +229,8 @@ namespace GameTracker
                 save_games();
                 //refresh datagrid to reflect changes
                 datagrid_games.Items.Refresh();
+
+                update_status_bar();
             }
             catch (Exception)
             {
@@ -261,6 +267,8 @@ namespace GameTracker
             //remove selected game from list and refresh datagrid
             game_list.Remove((videoGame) datagrid_games.SelectedItem);
             datagrid_games.Items.Refresh();
+
+            update_status_bar();
         }
 
         //save settings to xml file
@@ -421,6 +429,8 @@ namespace GameTracker
                     break;
                 }
             }
+
+            update_status_bar();
 
             switch (settings.window_state)
             {
@@ -632,6 +642,8 @@ namespace GameTracker
             sort();
             //refresh datagrid
             datagrid_games.Items.Refresh();
+
+            update_status_bar();
         }
 
         //sort datagrid using various options
@@ -1204,6 +1216,43 @@ namespace GameTracker
         private void button_close_Click(object sender, RoutedEventArgs e)
         {
             popup_customize.IsOpen = false;
+        }
+
+        private void update_status_bar()
+        {
+            int total = 0;
+            int beaten = 0;
+            int not_beaten = 0;
+            int currently_playing = 0;
+            int dropped = 0;
+
+            foreach(videoGame videoGame in game_list)
+            {
+                total += 1;
+                switch (videoGame.beaten)
+                {
+                    case "Yes":
+                        beaten += 1;
+                        break;
+                    case "No":
+                        not_beaten += 1;
+                        break;
+                    case "Currently Playing":
+                        currently_playing += 1;
+                        break;
+                    case "Dropped":
+                        dropped += 1;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            textblock_total.Text = total.ToString();
+            textblock_beaten.Text = beaten.ToString();
+            textblock_notbeaten.Text = not_beaten.ToString();
+            textblock_currentlyplaying.Text = currently_playing.ToString();
+            textblock_dropped.Text = dropped.ToString();
         }
     }
 

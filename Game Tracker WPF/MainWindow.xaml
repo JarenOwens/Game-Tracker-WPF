@@ -29,6 +29,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="155" />
             <RowDefinition />
+            <RowDefinition Height="18" />
         </Grid.RowDefinitions>
         <Grid x:Name="grid_controls" Background="{Binding Source={StaticResource HeaderColor}}" Height="155" Grid.Column="0">
             <Grid.Resources>
@@ -372,5 +373,37 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <StatusBar Grid.Row="2" VerticalAlignment="Bottom">
+            <StatusBarItem>
+                <TextBlock FontSize="9">Total:</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="textblock_total" FontSize="9">0</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock FontSize="9">Beaten:</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="textblock_beaten" FontSize="9">0</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock FontSize="9">Not Beaten:</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="textblock_notbeaten" FontSize="9">0</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock FontSize="9">Currently Playing:</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="textblock_currentlyplaying" FontSize="9">0</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock FontSize="9">Dropped:</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="textblock_dropped" FontSize="9">0</TextBlock>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
