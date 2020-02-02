@@ -116,12 +116,12 @@ namespace GameTracker
                 selected_game.name = textbox_name.Text;
                 selected_game.beaten = combobox_beaten.Text;
                 selected_game.wantToBeat = combobox_want_to_beat.Text;
-                selected_game.startDate = datepicker_start_date.DisplayDate;
+                selected_game.startDate = datepicker_start_date.SelectedDate.Value;
                 selected_game.startDateString = datepicker_start_date.SelectedDate.Value.Date.ToShortDateString();
                 //if the game is beaten the end date and hours should be updated
                 if (combobox_beaten.SelectedIndex == 0)
                 {
-                    selected_game.endDate = datepicker_end_date.DisplayDate;
+                    selected_game.endDate = datepicker_end_date.SelectedDate.Value;
                     selected_game.endDateString = datepicker_end_date.SelectedDate.Value.Date.ToShortDateString();
 
                     selected_game.hours = Convert.ToDouble(numberbox_hours_played.Text);
